@@ -4,65 +4,104 @@
 int line = 1;
 %}
 
-DIGIT       [0-9]
-LETTER      [a-zA-Z_]
-ID          {LETTER}({LETTER}|{DIGIT})*
-INT         {DIGIT}+
-FLOAT       {DIGIT}+"."{DIGIT}+
+%option noyywrap
+
+DIGIT      [0-9]
+LETTER     [a-zA-Z_]
+ID         {LETTER}({LETTER}|{DIGIT})*
+INT        {DIGIT}+
+FLOAT      {DIGIT}+"."{DIGIT}+
 
 %%
 
-"int"           { printf("KEYWORD : int\n"); }
-"float"         { printf("KEYWORD : float\n"); }
-"bool"          { printf("KEYWORD : bool\n"); }
+[\t\r ]+                    ;
 
-"if"            { printf("KEYWORD : if\n"); }
-"else"          { printf("KEYWORD : else\n"); }
-"while"         { printf("KEYWORD : while\n"); }
+\n                          { line++; }
 
-"print"         { printf("KEYWORD : print\n"); }
+"//".*                      ;
 
-"true"          { printf("BOOLEAN : true\n"); }
-"false"         { printf("BOOLEAN : false\n"); }
+"int"                       { printf("KEYWORD : int\n"); }
+"float"                     { printf("KEYWORD : float\n"); }
+"bool"                      { printf("KEYWORD : bool\n"); }
+"char"                      { printf("KEYWORD : char\n"); }
+"string"                    { printf("KEYWORD : string\n"); }
+"void"                      { printf("KEYWORD : void\n"); }
 
-{FLOAT}         { printf("FLOAT : %s\n",yytext); }
+"if"                        { printf("KEYWORD : if\n"); }
+"else"                      { printf("KEYWORD : else\n"); }
+"while"                     { printf("KEYWORD : while\n"); }
+"for"                       { printf("KEYWORD : for\n"); }
+"return"                    { printf("KEYWORD : return\n"); }
+"break"                     { printf("KEYWORD : break\n"); }
+"continue"                  { printf("KEYWORD : continue\n"); }
+"print"                     { printf("KEYWORD : print\n"); }
 
-{INT}           { printf("INTEGER : %s\n",yytext); }
+"true"                      { printf("BOOLEAN : true\n"); }
+"false"                     { printf("BOOLEAN : false\n"); }
 
-{ID}            { printf("IDENTIFIER : %s\n",yytext); }
+{FLOAT}                     { printf("FLOAT : %s\n", yytext); }
+{INT}                       { printf("INTEGER : %s\n", yytext); }
 
-"+"             { printf("PLUS\n"); }
-"-"             { printf("MINUS\n"); }
-"*"             { printf("MULTIPLY\n"); }
-"/"             { printf("DIVIDE\n"); }
+{ID}                        { printf("IDENTIFIER : %s\n", yytext); }
 
-"="             { printf("ASSIGN\n"); }
+"++"                        { printf("INCREMENT\n"); }
+"--"                        { printf("DECREMENT\n"); }
 
-";"             { printf("SEMICOLON\n"); }
+"<="                        { printf("LE\n"); }
+">="                        { printf("GE\n"); }
+"=="                        { printf("EQ\n"); }
+"!="                        { printf("NE\n"); }
 
-"("             { printf("LPAREN\n"); }
-")"             { printf("RPAREN\n"); }
+"&&"                        { printf("AND\n"); }
+"||"                        { printf("OR\n"); }
 
-"{"             { printf("LBRACE\n"); }
-"}"             { printf("RBRACE\n"); }
+"+"                         { printf("PLUS\n"); }
+"-"                         { printf("MINUS\n"); }
+"*"                         { printf("MULTIPLY\n"); }
+"/"                         { printf("DIVIDE\n"); }
+"%"                         { printf("MOD\n"); }
 
-[ \t\r]+        ;
+"<"                         { printf("LT\n"); }
+">"                         { printf("GT\n"); }
 
-\n              { line++; }
+"="                         { printf("ASSIGN\n"); }
 
-.               {
-                    printf("LEXICAL ERROR : %s at line %d\n",yytext,line);
-                }
+"!"                         { printf("NOT\n"); }
+
+";"                         { printf("SEMICOLON\n"); }
+","                         { printf("COMMA\n"); }
+
+"("                         { printf("LPAREN\n"); }
+")"                         { printf("RPAREN\n"); }
+
+"{"                         { printf("LBRACE\n"); }
+"}"                         { printf("RBRACE\n"); }
+
+"["                         { printf("LBRACKET\n"); }
+"]"                         { printf("RBRACKET\n"); }
+
+\"[^\"]*\"                  { printf("STRING : %s\n", yytext); }
+
+\'[^\']\'                   { printf("CHAR : %s\n", yytext); }
+
+.                           {
+                                printf("LEXICAL ERROR : %s at line %d\n", yytext, line);
+                            }
 
 %%
 
-int yywrap()
+int main(void)
 {
-    return 1;
-}
+    printf("====================================\n");
+    printf("      LEXICAL ANALYZER\n");
+    printf("====================================\n");
+    printf("Enter source code (Ctrl+D to finish)\n\n");
 
-int main()
-{
     yylex();
+
+    printf("\n====================================\n");
+    printf("Lexical Analysis Completed.\n");
+    printf("====================================\n");
+
     return 0;
 }
