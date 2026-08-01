@@ -10,30 +10,30 @@
 
 ---
 
-## 📌 Project Overview
+# 📌 Project Overview
 
-This project is a simplified compiler built as part of the **Compiler Construction Lab** course. It demonstrates the major phases of compilation, starting from lexical analysis to intermediate code generation.
+This project is a simplified compiler developed for the **Compiler Construction Lab** course. It demonstrates the fundamental phases of compiler design using **Flex** and **Bison**.
 
-The compiler accepts source code written in a simplified programming language and processes it through multiple compiler phases while reporting lexical, syntax, and semantic errors.
+The compiler accepts source code written in a simplified programming language and processes it through multiple compilation phases, including lexical analysis, syntax analysis, semantic analysis, Abstract Syntax Tree (AST) generation, Symbol Table management, and Three Address Code (TAC) generation.
 
 ---
 
-## ✨ Features
+# ✨ Features
 
 - Lexical Analysis
 - Syntax Analysis
 - Abstract Syntax Tree (AST)
 - Symbol Table Management
 - Semantic Analysis
-- Type Checking
-- Three-Address Code (TAC) Generation
+- Three Address Code (TAC) Generation
 - Error Detection and Reporting
 
 ---
 
-## ⚙️ Compiler Phases
+# ⚙️ Compiler Phases
 
-### 1. Lexical Analysis
+## 1. Lexical Analysis
+
 - Tokenizes source code
 - Identifies keywords
 - Detects identifiers
@@ -43,64 +43,65 @@ The compiler accepts source code written in a simplified programming language an
 
 ---
 
-### 2. Syntax Analysis
+## 2. Syntax Analysis
+
 - Validates grammar rules
 - Parses statements
-- Builds parse structure
+- Builds Abstract Syntax Tree
 - Reports syntax errors
 
 ---
 
-### 3. Abstract Syntax Tree (AST)
-- Generates AST
+## 3. Abstract Syntax Tree (AST)
+
+- Generates Abstract Syntax Tree
 - Represents program hierarchy
 - Simplifies parsing output
 
 ---
 
-### 4. Symbol Table
+## 4. Symbol Table
+
 Maintains information such as:
 
 - Variable Name
 - Data Type
 - Scope
-- Declaration Status
-- Memory Information
+- Declaration Line
 
 ---
 
-### 5. Semantic Analysis
+## 5. Semantic Analysis
 
 Performs semantic checking including:
 
 - Variable declaration checking
-- Multiple declaration detection
 - Undeclared variable detection
-- Type mismatch detection
 - Assignment validation
 
 ---
 
-### 6. Three Address Code (TAC)
+## 6. Three Address Code (TAC)
 
-Generates intermediate code using quadruple-style instructions.
+Generates intermediate code using temporary variables.
 
 Example:
 
-```
-t1 = b * c
-t2 = a + t1
-x = t2
+```text
+a = 5
+b = 10
+t1 = a + b
+c = t1
 ```
 
 ---
 
-## 🛠 Technologies Used
+# 🛠 Technologies Used
 
 - C Programming Language
 - Flex (Lex)
 - Bison (Yacc)
-- GCC
+- GCC Compiler
 - Ubuntu Linux
 
 ---
@@ -139,21 +140,23 @@ Compiler_Construction_Lab_Project/
 │       ├── tac.c
 │       └── tac.h
 │
-├── Makefile
+├── tests/
+├── CHANGELOG.md
+├── FAQ.md
+├── INSTALL.md
+├── LICENSE
 ├── README.md
-└── Project_Report.pdf
 ```
 
 ---
-
 
 > The actual project structure may vary depending on implementation.
 
 ---
 
-## 🚀 How to Run
+# 🚀 How to Run
 
-### Step 1
+## Step 1
 
 Clone the repository
 
@@ -161,41 +164,71 @@ Clone the repository
 git clone https://github.com/devjahid1/Compiler_Construction_Lab_Project.git
 ```
 
-### Step 2
+---
 
-Move into project directory
+## Step 2
 
-```bash
-ccd Compiler_Construction_Lab_Project
-```
-
-### Step 3
-
-Generate lexer
+Move into the project directory
 
 ```bash
-flex lexer.l
+cd Compiler_Construction_Lab_Project
 ```
 
-### Step 4
+---
 
-Generate parser
+## Step 3
+
+Install dependencies
 
 ```bash
-bison -d parser.y
+sudo apt update
+sudo apt install flex bison gcc
 ```
 
-### Step 5
+---
 
-Compile
+## Step 4
+
+Generate the parser
 
 ```bash
-gcc parser.tab.c lex.yy.c *.c -o compiler
+bison -d -o src/parser/parser.tab.c src/parser/parser.y
 ```
 
-### Step 6
+---
 
-Run
+## Step 5
+
+Generate the lexer
+
+```bash
+flex -o src/lexer/lex.yy.c src/lexer/lexer.l
+```
+
+---
+
+## Step 6
+
+Compile the project
+
+```bash
+gcc \
+src/parser/parser.tab.c \
+src/lexer/lex.yy.c \
+src/ast/ast.c \
+src/ast/ast_print.c \
+src/semantic/semantic.c \
+src/symbol_table/symbol_table.c \
+src/tac/tac.c \
+-lfl \
+-o compiler
+```
+
+---
+
+## Step 7
+
+Run the compiler
 
 ```bash
 ./compiler
@@ -203,74 +236,98 @@ Run
 
 ---
 
-## 💻 Sample Input
+# 💻 Sample Input
 
 ```c
-int x;
-float y;
+int a;
+int b;
+int c;
 
-y = 5.5;
-
-x = y;
+a = 5;
+b = 10;
+c = a + b;
 ```
 
 ---
 
-## 📤 Sample Output
+# 📤 Sample Output
 
-```
-Lexical Analysis Successful
+```text
+PROGRAM (PROGRAM)
+    DECLARATION (DECLARATION)
+        IDENTIFIER (int)
+        IDENTIFIER (a)
+    DECLARATION (DECLARATION)
+        IDENTIFIER (int)
+        IDENTIFIER (b)
+    DECLARATION (DECLARATION)
+        IDENTIFIER (int)
+        IDENTIFIER (c)
+    ASSIGNMENT (=)
+        IDENTIFIER (a)
+        INTEGER (5)
+    ASSIGNMENT (=)
+        IDENTIFIER (b)
+        INTEGER (10)
+    ASSIGNMENT (=)
+        BINARY_EXPR (+)
+            IDENTIFIER (a)
+            IDENTIFIER (b)
 
-Syntax Analysis Successful
+Symbol Table
 
-Abstract Syntax Tree Generated
+Identifier       Type       Scope   Line
+------------------------------------------------
+c                int        0       3
+b                int        0       2
+a                int        0       1
 
-Semantic Error:
-Type mismatch in assignment.
+Semantic Analysis Result: successful
 
-Three Address Code:
+Three Address Code
 
-t1 = 5.5
-y = t1
-x = y
+a = 5
+b = 10
+t1 = a + b
+c = t1
 ```
 
 ---
 
-## 📸 Screenshots
+# 📋 Project Output
 
-Add screenshots of:
+The compiler successfully demonstrates:
 
 - Lexical Analysis
-- AST
-- Symbol Table
+- Syntax Analysis
+- Abstract Syntax Tree (AST)
+- Symbol Table Generation
 - Semantic Analysis
-- TAC Output
+- Three Address Code (TAC)
+- Error Detection and Reporting
 
 ---
 
+# 👨‍💻 Team Members
 
-## 👨‍💻 Team Members
-
-| Name | ID |
-|------|------|
+| Name | Student ID |
+|------|------------|
 | MD JAHID MIAH SUYEB | 231-115-281 |
 | Hussain Adnan | 231-115-314 |
 | Junaed Ahmed | 231-115-319 |
 
 ---
 
-## 👨‍🏫 Course Information
+# 👨‍🏫 Course Information
 
 **Course:** Compiler Construction Lab
 
 **Department:** Computer Science & Engineering
 
-**University:** Metropolitan University
+**University:** Metropolitan University, Bangladesh
 
 ---
 
+# ⭐ Acknowledgements
 
-## ⭐ Acknowledgements
-
-Special thanks to our course teacher for guidance and support throughout the project.
+We sincerely express our gratitude to our respected course teacher for his valuable guidance, continuous support, and constructive feedback throughout the development of this project.
