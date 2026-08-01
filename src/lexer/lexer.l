@@ -1,107 +1,77 @@
 %{
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
-int line = 1;
+#include "../parser/parser.tab.h"
+
+int line_no = 1;
+
+static char *copy_lexeme(const char *text)
+{
+    size_t length = strlen(text) + 1;
+    char *copy = malloc(length);
+
+    if (copy == NULL) {
+        fprintf(stderr, "Out of memory while reading token\n");
+        exit(EXIT_FAILURE);
+    }
+
+    memcpy(copy, text, length);
+    return copy;
+}
 %}
 
 %option noyywrap
 
-DIGIT      [0-9]
-LETTER     [a-zA-Z_]
-ID         {LETTER}({LETTER}|{DIGIT})*
-INT        {DIGIT}+
-FLOAT      {DIGIT}+"."{DIGIT}+
+DIGIT       [0-9]
+LETTER      [a-zA-Z_]
+ID          {LETTER}({LETTER}|{DIGIT})*
+INTNUM      {DIGIT}+
+FLOATNUM    {DIGIT}+\.{DIGIT}+
 
 %%
 
-[\t\r ]+                    ;
+"int"               { return T_INT; }
+"float"             { return T_FLOAT; }
+"bool"              { return T_BOOL; }
+"if"                { return T_IF; }
+"else"              { return T_ELSE; }
+"while"             { return T_WHILE; }
+"print"             { return T_PRINT; }
+"true"              { return T_TRUE; }
+"false"             { return T_FALSE; }
 
-\n                          { line++; }
+"=="                { return T_EQ; }
+"!="                { return T_NE; }
+"<="                { return T_LE; }
+">="                { return T_GE; }
+"&&"                { return T_AND; }
+"||"                { return T_OR; }
+"="                 { return T_ASSIGN; }
+"<"                 { return T_LT; }
+">"                 { return T_GT; }
+"+"                 { return T_PLUS; }
+"-"                 { return T_MINUS; }
+"*"                 { return T_MUL; }
+"/"                 { return T_DIV; }
+"%"                 { return T_MOD; }
+"!"                 { return T_NOT; }
+"("                 { return T_LPAREN; }
+")"                 { return T_RPAREN; }
+"{"                 { return T_LBRACE; }
+"}"                 { return T_RBRACE; }
+";"                 { return T_SEMICOLON; }
+","                 { return T_COMMA; }
 
-"//".*                      ;
+{FLOATNUM}           { yylval.text = copy_lexeme(yytext); return T_FLOAT_LITERAL; }
+{INTNUM}             { yylval.text = copy_lexeme(yytext); return T_INT_LITERAL; }
+{ID}                 { yylval.text = copy_lexeme(yytext); return T_IDENTIFIER; }
 
-"int"                       { printf("KEYWORD : int\n"); }
-"float"                     { printf("KEYWORD : float\n"); }
-"bool"                      { printf("KEYWORD : bool\n"); }
-"char"                      { printf("KEYWORD : char\n"); }
-"string"                    { printf("KEYWORD : string\n"); }
-"void"                      { printf("KEYWORD : void\n"); }
+"//".*              { /* Skip line comments. */ }
+[ \t\r]+            { /* Skip whitespace. */ }
+\n                  { ++line_no; }
 
-"if"                        { printf("KEYWORD : if\n"); }
-"else"                      { printf("KEYWORD : else\n"); }
-"while"                     { printf("KEYWORD : while\n"); }
-"for"                       { printf("KEYWORD : for\n"); }
-"return"                    { printf("KEYWORD : return\n"); }
-"break"                     { printf("KEYWORD : break\n"); }
-"continue"                  { printf("KEYWORD : continue\n"); }
-"print"                     { printf("KEYWORD : print\n"); }
-
-"true"                      { printf("BOOLEAN : true\n"); }
-"false"                     { printf("BOOLEAN : false\n"); }
-
-{FLOAT}                     { printf("FLOAT : %s\n", yytext); }
-{INT}                       { printf("INTEGER : %s\n", yytext); }
-
-{ID}                        { printf("IDENTIFIER : %s\n", yytext); }
-
-"++"                        { printf("INCREMENT\n"); }
-"--"                        { printf("DECREMENT\n"); }
-
-"<="                        { printf("LE\n"); }
-">="                        { printf("GE\n"); }
-"=="                        { printf("EQ\n"); }
-"!="                        { printf("NE\n"); }
-
-"&&"                        { printf("AND\n"); }
-"||"                        { printf("OR\n"); }
-
-"+"                         { printf("PLUS\n"); }
-"-"                         { printf("MINUS\n"); }
-"*"                         { printf("MULTIPLY\n"); }
-"/"                         { printf("DIVIDE\n"); }
-"%"                         { printf("MOD\n"); }
-
-"<"                         { printf("LT\n"); }
-">"                         { printf("GT\n"); }
-
-"="                         { printf("ASSIGN\n"); }
-
-"!"                         { printf("NOT\n"); }
-
-";"                         { printf("SEMICOLON\n"); }
-","                         { printf("COMMA\n"); }
-
-"("                         { printf("LPAREN\n"); }
-")"                         { printf("RPAREN\n"); }
-
-"{"                         { printf("LBRACE\n"); }
-"}"                         { printf("RBRACE\n"); }
-
-"["                         { printf("LBRACKET\n"); }
-"]"                         { printf("RBRACKET\n"); }
-
-\"[^\"]*\"                  { printf("STRING : %s\n", yytext); }
-
-\'[^\']\'                   { printf("CHAR : %s\n", yytext); }
-
-.                           {
-                                printf("LEXICAL ERROR : %s at line %d\n", yytext, line);
-                            }
+.                    { fprintf(stderr, "Lexical error at line %d: %s\n", line_no, yytext); }
 
 %%
-
-int main(void)
-{
-    printf("====================================\n");
-    printf("      LEXICAL ANALYZER\n");
-    printf("====================================\n");
-    printf("Enter source code (Ctrl+D to finish)\n\n");
-
-    yylex();
-
-    printf("\n====================================\n");
-    printf("Lexical Analysis Completed.\n");
-    printf("====================================\n");
-
-    return 0;
-}

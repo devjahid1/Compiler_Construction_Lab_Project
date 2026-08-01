@@ -1,460 +1,276 @@
 # Compiler Construction Lab Project
 
-### Design and Implement a Mini Programming Language Compiler using Flex and Bison
+> A mini compiler developed for the Compiler Construction Lab course that performs lexical analysis, syntax analysis, abstract syntax tree generation, semantic analysis, symbol table management, and three-address code generation.
 
-Department of Computer Science and Engineering
-Metropolitan University, Bangladesh
+![Language](https://img.shields.io/badge/Language-C-blue.svg)
+![Flex](https://img.shields.io/badge/Flex-Lexical%20Analyzer-orange.svg)
+![Bison](https://img.shields.io/badge/Bison-Parser-green.svg)
+![Platform](https://img.shields.io/badge/Platform-Linux%20%7C%20Ubuntu-lightgrey.svg)
+![License](https://img.shields.io/badge/License-Educational-blue)
 
 ---
 
-Welcome to the official repository for the **Compiler Construction Lab Project**!
+## 📌 Project Overview
 
-This repository serves as the **official project template and instruction repository** for the Compiler Construction Laboratory course.
+This project is a simplified compiler built as part of the **Compiler Construction Lab** course. It demonstrates the major phases of compilation, starting from lexical analysis to intermediate code generation.
 
-Every project group **must fork this repository** and complete the entire project inside their own GitHub repository. This repository is provided only as a project template to help you organize your work. It does not contain the implementation of any required compiler phase. Every group is responsible for designing and implementing their own solution.
+The compiler accepts source code written in a simplified programming language and processes it through multiple compiler phases while reporting lexical, syntax, and semantic errors.
 
+---
 
+## ✨ Features
 
-# Important Notice
+- Lexical Analysis
+- Syntax Analysis
+- Abstract Syntax Tree (AST)
+- Symbol Table Management
+- Semantic Analysis
+- Type Checking
+- Three-Address Code (TAC) Generation
+- Error Detection and Reporting
 
-This repository **does not contain the project solution**.
+---
 
-It only contains:
+## ⚙️ Compiler Phases
 
-* Project instructions
-* Project manual
-* Repository guidelines
-* GitHub workflow
-* Required directory structure
-* Submission instructions
+### 1. Lexical Analysis
+- Tokenizes source code
+- Identifies keywords
+- Detects identifiers
+- Recognizes operators
+- Processes constants
+- Handles delimiters
 
-The complete project specification is provided in:
+---
 
-> **Compiler Construction Lab Project Manual.pdf**
+### 2. Syntax Analysis
+- Validates grammar rules
+- Parses statements
+- Builds parse structure
+- Reports syntax errors
 
-Read the project manual carefully before starting the implementation.
+---
 
+### 3. Abstract Syntax Tree (AST)
+- Generates AST
+- Represents program hierarchy
+- Simplifies parsing output
 
+---
 
-# Project Objective
+### 4. Symbol Table
+Maintains information such as:
 
-The objective of this project is to design and implement a compiler front-end for a custom programming language using:
+- Variable Name
+- Data Type
+- Scope
+- Declaration Status
+- Memory Information
 
-* Flex
-* Bison
-* C/C++
-* Linux
-* Make
-* Git
-* GitHub
+---
 
-The project integrates the major phases of compiler construction into one complete software system.
+### 5. Semantic Analysis
 
-Your compiler must implement:
+Performs semantic checking including:
 
-* Lexical Analysis
-* Syntax Analysis
-* Abstract Syntax Tree (AST)
-* Symbol Table
-* Semantic Analysis
-* Intermediate Code Generation (Three Address Code)
+- Variable declaration checking
+- Multiple declaration detection
+- Undeclared variable detection
+- Type mismatch detection
+- Assignment validation
 
-Refer to the Project Manual for the complete language specification and implementation requirements.
+---
 
+### 6. Three Address Code (TAC)
 
-
-# Repository Workflow
-
-Every project group must strictly follow the workflow below.
-
-```
-Instructor Repository
-        │
-        ▼
-Fork Repository
-        │
-        ▼
-Student Group Repository
-        │
-        ▼
-Regular Development
-        │
-        ▼
-GitHub Repository Submission
-```
-
-Students **must not develop directly inside this repository.**
-
-
-
-# Step 1: Fork This Repository
-
-Click the **Fork** button located at the top-right corner of this repository.
-
-This will create your own copy of the repository under your GitHub account.
-
-Each group must maintain its own repository.
-
-Do **NOT** request write access to the instructor repository.
-
-
-
-# Step 2: Clone Your Own Repository
-
-Clone **your fork**, not the instructor repository.
+Generates intermediate code using quadruple-style instructions.
 
 Example:
 
-```bash
-git clone https://github.com/your-username/your-repository.git
-cd your-repository
+```
+t1 = b * c
+t2 = a + t1
+x = t2
 ```
 
+---
 
+## 🛠 Technologies Used
 
-# Step 3: Rename Your Repository
+- C Programming Language
+- Flex (Lex)
+- Bison (Yacc)
+- GCC
+- Ubuntu Linux
 
-Rename your repository using the following format:
+---
 
-```
-CC-Lab-Project-GroupName
-```
+# 📂 Project Structure
 
-
-
-# Step 4: Add Team Members
-
-Every member of the project group must be added as a collaborator.
-
-GitHub
-
-Settings
-
-↓
-
-Collaborators
-
-↓
-
-Add Collaborator
-
-Every member should contribute through their own GitHub account.
-
-
-
-# Step 5: Repository Visibility
-
-Keep your repository **Public** until the evaluation process has been completed.
-
-Do not delete your repository after submission.
-
-
-
-# Project Directory Structure
-
-Your repository should approximately follow the following structure.
-
-```
-project-root/
-
-├── docs/
+```text
+Compiler_Construction_Lab_Project/
 │
 ├── src/
-│   ├── lexer/
-│   ├── parser/
 │   ├── ast/
+│   │   ├── ast.c
+│   │   ├── ast.h
+│   │   └── ast_print.c
+│   │
+│   ├── lexer/
+│   │   ├── lexer.l
+│   │   ├── lexer_backup.l
+│   │   └── lex.yy.c
+│   │
+│   ├── parser/
+│   │   ├── parser.y
+│   │   ├── parser.tab.c
+│   │   ├── parser.tab.h
+│   │   └── token.h
+│   │
 │   ├── semantic/
-│   └── symbol_table/
-│
-├── tests/
-│
-├── examples/
+│   │   ├── semantic.c
+│   │   └── semantic.h
+│   │
+│   ├── symbol_table/
+│   │   ├── symbol_table.c
+│   │   └── symbol_table.h
+│   │
+│   └── tac/
+│       ├── tac.c
+│       └── tac.h
 │
 ├── Makefile
-│
 ├── README.md
-│
-└── Project Report.pdf
+└── Project_Report.pdf
 ```
-
-You may organize your source code further if necessary, but the overall structure should remain clean and professional.
-
-
-
-# Required Compiler Modules
-
-Your compiler must include the following components.
-
-## Lexical Analyzer
-
-* Token recognition
-* Keywords
-* Identifiers
-* Constants
-* Operators
-* Delimiters
-* Comment handling
-* Lexical error reporting
-
-
-
-## Syntax Analyzer
-
-* Complete CFG implementation
-* Parsing using Bison
-* Syntax error detection
-* Basic error recovery
-
-
-
-## Abstract Syntax Tree
-
-* Build AST during parsing
-* Meaningful node hierarchy
-* AST visualization or printing
-
-
-## Symbol Table
-
-* Variable declarations
-* Nested scopes
-* Identifier lookup
-* Scope management
-
-
-## Semantic Analyzer
-
-Your compiler must detect semantic errors including:
-
-* Undeclared variables
-* Redeclaration
-* Scope violations
-* Type mismatch
-* Invalid assignments
-* Invalid expressions
-
-
-## Intermediate Code Generation
-
-Generate Three Address Code (TAC).
-
-Support:
-
-* Arithmetic expressions
-* Relational expressions
-* Logical expressions
-* Assignment statements
-* if
-* if-else
-* while
-* print
-
-
-# Git Commit Policy
-
-GitHub activity will be considered during evaluation.
-
-Every student is expected to contribute throughout the semester.
-
-Avoid uploading the entire project at the end.
-
-Commit regularly.
-
-Good commit messages:
-
-```
-Add lexer rules for keywords
-
-Implement parser grammar
-
-Create AST node hierarchy
-
-Implement symbol table lookup
-
-Add semantic type checking
-
-Generate TAC for arithmetic expressions
-
-Fix parser conflicts
-
-Improve syntax error recovery
-```
-
-Avoid commit messages like:
-
-```
-update
-
-new
-
-code
-
-final
-
-fix
-
-project
-```
-
-Meaningful commit history reflects professional software development practices.
-
-
-# Branching (Recommended)
-
-You may either:
-
-* work directly on the main branch
-
-or
-
-* create feature branches
-
-Example
-
-```
-feature/lexer
-
-feature/parser
-
-feature/semantic
-
-feature/tac
-```
-
-Merge feature branches into `main` after testing.
-
-
-# .gitignore
-
-A `.gitignore` file is included to prevent generated and temporary files from being tracked by Git.
-
-Examples include:
-
-* Flex generated files
-* Bison generated files
-* Object files
-* Executables
-* IDE configuration files
-* Temporary files
-* Log files
-
-Do not remove the `.gitignore` file.
-
-
-# Coding Guidelines
-
-Write clean and readable code.
-
-Use
-
-* meaningful variable names
-* proper indentation
-* modular design
-* comments where appropriate
-
-Avoid
-
-* unnecessary global variables
-* duplicated code
-* magic numbers
-* excessively long functions
-
-
-# Test Suite
-
-This directory contains sample test programs for the compiler.
-
-- `valid/` contains programs that should compile successfully and produce valid output.
-- `invalid/` contains programs that intentionally violate lexical, syntactic, or semantic rules. Your compiler should detect and report these errors with clear diagnostic messages where possible.
-
-These files are provided as examples only. You are expected to develop additional test cases to thoroughly validate your compiler.
-
-
-# AI Usage Policy
-
-Artificial Intelligence tools are permitted.
-
-Examples include:
-
-* ChatGPT
-* GitHub Copilot
-* Claude
-* Gemini
-
-However,
-
-Every student is expected to fully understand every submitted line of code.
-
-During demonstration and viva, any group member may be asked to explain any part of the implementation.
-
-Failure to explain the implementation may result in mark deductions regardless of whether the compiler functions correctly.
-
-
-# Academic Integrity
-
-The submitted work must be original.
-
-Do not
-
-* copy another group's implementation
-* reuse previous semesters' projects
-* submit downloaded compiler implementations
-
-External resources may be used for learning purposes, but all references must be properly acknowledged where appropriate.
-
-
-# Submission
-
-Submit your:
-
-* GitHub Repository Link
-
-<!-- No ZIP archive should be submitted unless explicitly requested. -->
-
-The submitted repository must include:
-
-* Source Code
-* README
-* Project Report
-* Test Programs
-* Example Programs
-* Build Instructions
-* Execution Instructions
-
-
-# Evaluation
-
-Your project may be evaluated based on:
-
-* Correctness
-* Code quality
-* Documentation
-* GitHub activity
-* Demonstration
-* Presentation
-* Group Viva
-
-A working project alone does not guarantee full marks.
-
-Understanding your implementation is equally important.
-
-
-# Deadline
-
-Refer to the **Compiler Construction Lab Project Manual.pdf** for the official submission deadline.
-
-Late submissions may receive penalties according to the course policy.
 
 ---
 
-If you have any questions regarding the project specification, contact the instructor **before** the submission deadline.
 
-Please avoid waiting until the last moment to seek clarification.
+> The actual project structure may vary depending on implementation.
 
 ---
 
-This project is intended to integrate everything you have learned throughout the Compiler Construction Laboratory course.
+## 🚀 How to Run
 
-Plan your work, collaborate effectively, commit regularly, and write clean, maintainable code.
+### Step 1
 
-Happy Coding!
+Clone the repository
+
+```bash
+git clone https://github.com/devjahid1/Compiler_Construction_Lab_Project.git
+```
+
+### Step 2
+
+Move into project directory
+
+```bash
+ccd Compiler_Construction_Lab_Project
+```
+
+### Step 3
+
+Generate lexer
+
+```bash
+flex lexer.l
+```
+
+### Step 4
+
+Generate parser
+
+```bash
+bison -d parser.y
+```
+
+### Step 5
+
+Compile
+
+```bash
+gcc parser.tab.c lex.yy.c *.c -o compiler
+```
+
+### Step 6
+
+Run
+
+```bash
+./compiler
+```
+
+---
+
+## 💻 Sample Input
+
+```c
+int x;
+float y;
+
+y = 5.5;
+
+x = y;
+```
+
+---
+
+## 📤 Sample Output
+
+```
+Lexical Analysis Successful
+
+Syntax Analysis Successful
+
+Abstract Syntax Tree Generated
+
+Semantic Error:
+Type mismatch in assignment.
+
+Three Address Code:
+
+t1 = 5.5
+y = t1
+x = y
+```
+
+---
+
+## 📸 Screenshots
+
+Add screenshots of:
+
+- Lexical Analysis
+- AST
+- Symbol Table
+- Semantic Analysis
+- TAC Output
+
+---
+
+
+## 👨‍💻 Team Members
+
+| Name | ID |
+|------|------|
+| MD JAHID MIAH SUYEB | 231-115-281 |
+| Hussain Adnan | 231-115-314 |
+| Junaed Ahmed | 231-115-319 |
+
+---
+
+## 👨‍🏫 Course Information
+
+**Course:** Compiler Construction Lab
+
+**Department:** Computer Science & Engineering
+
+**University:** Metropolitan University
+
+---
+
+
+## ⭐ Acknowledgements
+
+Special thanks to our course teacher for guidance and support throughout the project.
